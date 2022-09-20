@@ -15,3 +15,6 @@ Skills : Software Design, Programming, Data base management.
 
 Name: Vineesha Sangepu
 Skills : Database management, Programming, Web development, Software design.
+
+Name : Praveen Reddy Talupu
+Skills : Manual Testing, Programming, Basic Knowledge on mySQL.
