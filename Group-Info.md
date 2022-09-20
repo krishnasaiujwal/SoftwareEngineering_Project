@@ -18,3 +18,6 @@ Skills : Database management, Programming, Web development, Software design.
 
 Name : Praveen Reddy Talupu
 Skills : Manual Testing, Programming, Basic Knowledge on mySQL.
+
+Name: Jayakanth Madineni
+Skills: Sql,snowflake,Basic knowledge on python. 
