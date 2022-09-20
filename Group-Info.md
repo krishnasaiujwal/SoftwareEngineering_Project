@@ -10,3 +10,5 @@ Name: Jonas Odom
 Skills: Programming, Thick Client Applications, Web Development
 Note: This is second Repo and Group-Info submitted , the first was Assignment1
   
+Name: Sharan Kumar Pallapu
+Skills : Software Design, Programming, Data base management.
