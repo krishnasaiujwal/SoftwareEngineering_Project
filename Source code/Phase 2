@@ -1,1 +1,893 @@
 
+Add Contact Activity code:
+
+package com.example.womensafetyapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AddContactActivity extends AppCompatActivity {
+    Button addbtn;
+
+    EditText phoneno;
+
+    EditText contact_phoneno;
+
+    String phoneno_1="";
+    String contact_phoneno_1="";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_contact);
+        phoneno=(EditText)findViewById(R.id.phoneno);
+        contact_phoneno=(EditText)findViewById(R.id.contact_phoneno);
+        addbtn=(Button)findViewById(R.id.submit);
+        addbtn.setOnClickListener(new AddButtonlick());
+
+    }
+    class AddButtonlick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+
+            if(phoneno.getText().toString().length()==0)
+            {
+                Toast.makeText(getApplicationContext(),"Fill The Field phoneno",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(contact_phoneno.getText().toString().length()==0)
+            {
+                Toast.makeText(getApplicationContext(),"Fill The Field contact_phoneno",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            phoneno_1=phoneno.getText().toString();
+            if(phoneno_1.length()==0)
+            {
+                Toast.makeText(AddContactActivity.this,"Fill phoneno",Toast.LENGTH_LONG).show();
+                return;
+            }
+            contact_phoneno_1=contact_phoneno.getText().toString();
+            if(contact_phoneno_1.length()==0)
+            {
+                Toast.makeText(AddContactActivity.this,"Fill contact_phoneno",Toast.LENGTH_LONG).show();
+                return;
+            }
+            phoneno.setText("");
+            contact_phoneno.setText("");
+            new AddContact().execute();
+
+        }
+    }
+    class AddContact extends AsyncTask<String, String, String>
+    {
+
+        private ProgressDialog pDialog = new ProgressDialog(AddContactActivity.this);
+        private static final String TAG_SUCCESS = "success";
+        int success=0;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog.setMessage("wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            try {
+                //Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("phoneno",phoneno_1));
+                params.add(new BasicNameValuePair("contact_phoneno",contact_phoneno_1));
+                JSONObject json = new JSONParser().makeHttpRequest(StaticData.server+"addcontact.php", "GET", params);
+
+
+
+
+                success = json.getInt(TAG_SUCCESS);
+            }
+            catch (JSONException e)
+            {
+
+                //Toast.makeText(AddContactActivity.this, "Error:"+e.toString(), Toast.LENGTH_LONG).show();
+            }
+            return null;
+        }
+
+
+        protected void onPostExecute(String file_url) {
+
+            pDialog.dismiss();
+
+
+            if (success == 1)
+            {
+                Toast.makeText(AddContactActivity.this,"Contact Added Successfully.",Toast.LENGTH_LONG).show();
+
+            }
+            else
+            {
+                Toast.makeText(AddContactActivity.this,"Contact Not Added.  Try Again!",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+}
+
+Home Menu Activity:
+
+package com.example.womensafetyapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+
+public class HomeMenuActivity extends AppCompatActivity {
+    ImageButton AddContact;
+    ImageButton ViewContacts;
+    ImageButton FakeCall;
+    ImageButton SecureMe;
+    ImageButton Feedback;
+    ImageButton Quit;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home_menu);
+        AddContact=(ImageButton)findViewById(R.id.AddContact);
+        AddContact.setOnClickListener(new AddContactclick ());
+        ViewContacts=(ImageButton)findViewById(R.id.ViewContacts);
+        ViewContacts.setOnClickListener(new ViewContactsclick ());
+        FakeCall=(ImageButton)findViewById(R.id.FakeCall);
+        FakeCall.setOnClickListener(new FakeCallclick ());
+        SecureMe=(ImageButton)findViewById(R.id.SecureMe);
+        SecureMe.setOnClickListener(new SecureMeclick ());
+        Feedback=(ImageButton)findViewById(R.id.Feedback);
+        Feedback.setOnClickListener(new Feedbackclick ());
+        Quit=(ImageButton)findViewById(R.id.Quit);
+        Quit.setOnClickListener(new Quitclick ());
+    }
+
+    class AddContactclick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            Intent i=new Intent(HomeMenuActivity.this,AddContactActivity.class);
+            startActivity(i);
+        }
+    }
+
+    class ViewContactsclick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            //Intent i=new Intent(HomeMenuActivity.this,navigatefile.class);
+            //startActivity(i);
+        }
+    }
+
+    class FakeCallclick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            //Intent i=new Intent(HomeMenuActivity.this,navigatefile.class);
+            //startActivity(i);
+        }
+    }
+
+    class SecureMeclick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            //Intent i=new Intent(HomeMenuActivity.this,navigatefile.class);
+            //startActivity(i);
+        }
+    }
+
+    class Feedbackclick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            //Intent i=new Intent(HomeMenuActivity.this,navigatefile.class);
+            //startActivity(i);
+        }
+    }
+
+    class Quitclick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            Intent i=new Intent(HomeMenuActivity.this,MainActivity.class);
+            startActivity(i);
+            finishAffinity();
+        }
+    }
+}
+
+JSONparser.java
+package com.example.womensafetyapp;
+
+import android.util.Log;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
+public class JSONParser {
+
+    static InputStream is = null;
+    static JSONObject jObj = null;
+    static String json = "";
+
+
+    public JSONParser() {
+
+    }
+
+
+    public JSONObject makeHttpRequest(String url, String method,
+                                      List<NameValuePair> params) {
+
+
+        try {
+
+
+            if(method == "POST"){
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(url);
+                httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+
+            }else if(method == "GET"){
+
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String paramString = URLEncodedUtils.format(params, "utf-8");
+                url += "?" + paramString;
+                HttpGet httpGet = new HttpGet(url);
+
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    is, "iso-8859-1"), 8);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            is.close();
+            json = sb.toString();
+        } catch (Exception e) {
+            Log.e("Buffer Error", "Error converting result " + e.toString());
+        }
+
+        // try parse the string to a JSON object
+        try {
+            jObj = new JSONObject(json);
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        }
+
+
+        return jObj;
+
+    }
+}
+MainActivity.java
+package com.example.womensafetyapp;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+    Button Login;
+    TextView register;
+    EditText password;
+    String password_1="";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Login=(Button)findViewById(R.id.login);
+        Login.setOnClickListener(new Loginclick ());
+
+        password=(EditText)findViewById(R.id.password);
+        register=(TextView)findViewById(R.id.register);
+        register.setOnClickListener(new CreateAccount());
+
+    }
+
+    class CreateAccount implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            Intent i=new Intent(MainActivity.this,NewAccount.class);
+            startActivity(i);
+        }
+    }
+
+    class Loginclick implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            password_1=password.getText().toString();
+            if(password_1.length()==0)
+            {
+                Toast.makeText(MainActivity.this,"Invalid Password",Toast.LENGTH_LONG).show();
+                return;
+            }
+            new UserLogin().execute();
+        }
+    }
+
+    class UserLogin extends AsyncTask<String, String, String>
+    {
+      private ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
+        private static final String TAG_SUCCESS = "success";
+        int success;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog.setMessage("searching....");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+
+        protected String doInBackground(String... args) {
+
+            try {
+
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("password",password_1));
+                JSONObject json = new JSONParser().makeHttpRequest(StaticData.server+"userlogin.php", "GET", params);
+
+
+                Log.d("Create Response", json.toString());
+
+
+                try {
+
+                    success = json.getInt(TAG_SUCCESS);
+                    if(success==1)
+                    {
+                        StaticData.phoneno=json.getString("phoneno");
+                        StaticData.name=json.getString("name");
+                        StaticData.age=json.getString("age");
+                        StaticData.gender=json.getString("gender");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+
+                //Toast.makeText(MainActivity.this, "Error:"+e.toString(), Toast.LENGTH_LONG).show();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String file_url) {
+
+            pDialog.dismiss();
+
+            if(success==1)
+            {
+                Intent i=new Intent(MainActivity.this,HomeMenuActivity.class);
+                startActivity(i);
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this, "Incorrect Password", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+    /////////////
+
+
+}
+
+NewAccount.java
+
+package com.example.womensafetyapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class NewAccount extends AppCompatActivity {
+    Button accountbtn;
+    EditText phoneno;
+    EditText firstname;
+    EditText lastname;
+    EditText age;
+    Spinner gender;
+    EditText email;
+    EditText city;
+    EditText address,password,cpassword;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_account);
+
+        phoneno=(EditText)findViewById(R.id.phoneno);
+        firstname=(EditText)findViewById(R.id.firstname);
+        lastname=(EditText)findViewById(R.id.lastname);
+        age=(EditText)findViewById(R.id.age);
+        gender=(Spinner) findViewById(R.id.gender);
+        email=(EditText)findViewById(R.id.email);
+
+        city=(EditText)findViewById(R.id.city);
+        address=(EditText)findViewById(R.id.address);
+        password=(EditText)findViewById(R.id.password);
+        cpassword=(EditText)findViewById(R.id.cpassword);
+
+
+
+
+        accountbtn=(Button)findViewById(R.id.accountbtn);
+        accountbtn.setOnClickListener(new AccountButtonClick());
+    }
+
+    class AccountButtonClick implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+
+
+            if(phoneno.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill phoneno",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(firstname.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill firstname",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(lastname.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill lastname",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(age.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill age",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(gender.getSelectedItem().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill gender",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(email.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill email",Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(validateEmail(email.getText().toString())==false)
+            {
+                Toast.makeText(NewAccount.this,"Invalid email",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(city.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill city",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(address.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill address",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
+            if(password.getText().toString().length()==0)
+            {
+                Toast.makeText(NewAccount.this,"Fill password",Toast.LENGTH_LONG).show();
+                return;
+            }
+            String password1=password.getText().toString();
+            if(!password1.equals(cpassword.getText().toString()))
+            {
+                Toast.makeText(NewAccount.this,"passwords not match",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            new UserRegistration().execute();
+
+        }
+    }
+
+    public static boolean validateEmail(String email) {
+        boolean valid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    class UserRegistration extends AsyncTask<String, String, String>
+    {
+        private ProgressDialog pDialog = new ProgressDialog(NewAccount.this);
+        private static final String TAG_SUCCESS = "success";
+        int success;
+
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog.setMessage("Storing....");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+
+        protected String doInBackground(String... args) {
+
+            try {
+
+
+
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("phoneno",phoneno.getText().toString()));
+                params.add(new BasicNameValuePair("firstname",firstname.getText().toString()));
+                params.add(new BasicNameValuePair("lastname",lastname.getText().toString()));
+                params.add(new BasicNameValuePair("age",age.getText().toString()));
+                params.add(new BasicNameValuePair("gender",gender.getSelectedItem().toString()));
+                params.add(new BasicNameValuePair("email",email.getText().toString()));
+
+                params.add(new BasicNameValuePair("city",city.getText().toString()));
+                params.add(new BasicNameValuePair("address",address.getText().toString()));
+                params.add(new BasicNameValuePair("password",password.getText().toString()));
+                JSONObject json = new JSONParser().makeHttpRequest(StaticData.server+"user_reg.php", "GET", params);
+               Log.d("Create Response", json.toString());
+               try {
+                  success = json.getInt(TAG_SUCCESS);
+                } catch (JSONException e) {
+                  //  e.printStackTrace();
+                }
+           } catch (Exception e) {
+
+                //Toast.makeText(NewAccount.this, "Error:"+e.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(String file_url) {
+          pDialog.dismiss();
+             if(success==1)
+            {
+                Intent i=new Intent(NewAccount.this,MainActivity.class);
+                startActivity(i);
+            }
+            else
+            {
+                Toast.makeText(NewAccount.this, "Account created successfully", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+
+}
+StaticData.java
+
+package com.example.womensafetyapp;
+
+public class StaticData {
+    public static String phoneno="";
+    public  static String server = "http://www.womensafetyapp.in/womensafety/";
+    public static String name, age, gender;
+}
+static data:
+
+package com.example.womensafetyapp;
+
+public class StaticData {
+    public static String phoneno="",lat="0",lon="0";
+    public  static String server = "https://www.womensafetyapp.in/womensafety/";
+    public static String name, age, gender,firstname,lastname,email,city,address,password;
+}
+
+view contacts activity:
+package com.example.womensafetyapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.*;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
+
+import android.widget.AdapterView.OnItemClickListener;
+
+public class ViewContactsActivity extends AppCompatActivity {
+    ListView listview1;
+    ArrayList<String> ids;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_contacts);
+        listview1=(ListView)findViewById(R.id.listview1);
+
+        new LoadContacts().execute();
+    }
+    class LoadContacts extends AsyncTask<String, String, String>
+    {
+
+        private ProgressDialog pDialog = new ProgressDialog(ViewContactsActivity.this);
+        private static final String TAG_SUCCESS = "success";
+        int success=0;
+        String data="";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog.setMessage("wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            try {
+
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("phoneno",StaticData.phoneno));
+                JSONObject json = new JSONParser().makeHttpRequest(StaticData.server+"ViewContactsAcitivity1.php", "GET", params);
+
+
+                Log.d("Create Response", json.toString());
+
+
+
+                success = json.getInt(TAG_SUCCESS);
+                if(success==1)
+                {
+                    data=json.getString("recs");
+                }
+            }
+            catch (JSONException e)
+            {
+
+                //Toast.makeText(ViewContactsActivity.this, "Error"+e.toString(), Toast.LENGTH_LONG).show();
+            }
+            return null;
+        }
+
+
+        protected void onPostExecute(String file_url)
+        {
+            //dismiss the dialog once done
+            pDialog.dismiss();
+
+
+            if (success == 1)
+            {
+                ArrayList<String> al=new ArrayList<String>();
+                ids=new ArrayList<String>();
+
+                boolean found=false;
+                try
+                {
+                    String rows[]=data.split("@@");
+                    for(String row: rows)
+                    {
+                        if(row.length()>1)
+                        {
+                            String s[]=row.split("~");
+                            String str="contact_person : "+s[1]+"\n"+"contact_phoneno : "+s[2];
+                            al.add(str);
+                            ids.add(s[0]);
+                            found=true;
+
+                        }
+                    }
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewContactsActivity.this,android.R.layout.simple_list_item_1, al);
+                    listview1.setAdapter(arrayAdapter);
+
+                    if(found==false)
+                        Toast.makeText(ViewContactsActivity.this,"Contacts Not Found2",Toast.LENGTH_LONG).show();
+
+                }
+                catch(Exception eee)
+                {
+                    Toast.makeText(ViewContactsActivity.this,"Error : "+eee,Toast.LENGTH_LONG).show();
+                }
+
+            }
+            else
+            {
+                Toast.makeText(ViewContactsActivity.this,"Contacts Not Found1",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+}
